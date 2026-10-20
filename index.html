@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0E6B62">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pharm plan">
+<title>Pharmacology test plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F6F5;--surf:#FFFFFF;--ink:#1B2A2F;--mute:#5B6B70;--line:#D3DDDA;--acc:#0E6B62;--acc-ink:#FFFFFF;--late:#B4620F;--late-bg:#FBF0E1;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1719;--surf:#152226;--ink:#E4EEEC;--mute:#95A9AC;--line:#28393D;--acc:#4CC2B3;--acc-ink:#062521;--late:#E5B062;--late-bg:#2A2216}}
+:root[data-theme="dark"]{--bg:#0E1719;--surf:#152226;--ink:#E4EEEC;--mute:#95A9AC;--line:#28393D;--acc:#4CC2B3;--acc-ink:#062521;--late:#E5B062;--late-bg:#2A2216}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:620px;margin:0 auto;padding:20px 16px 48px}
+.cd{margin:0 0 8px;color:var(--mute);font-size:15px}
+.bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc)}
+.prog{margin:6px 0 0;font-size:14px;color:var(--mute)}
+.chips{display:flex;gap:8px;overflow-x:auto;margin:14px -16px 6px;padding:4px 16px 10px;scrollbar-width:thin}
+.chip{flex:0 0 auto;min-width:66px;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;background:transparent;color:var(--ink);font:inherit;font-size:13px;line-height:1.25;text-align:center;cursor:pointer}
+.chip span,.chip b{display:block}
+.chip b{font-weight:600;font-size:15px}
+.chip.part{border-color:var(--acc)}
+.chip.late{border-color:var(--late)}
+.chip.done{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.chip.now{box-shadow:0 3px 0 -1px var(--ink)}
+.chip.sel{outline:2.5px solid var(--ink);outline-offset:2px}
+h1{margin:16px 0 2px;font-size:clamp(30px,8vw,42px);line-height:1.05;font-weight:800;letter-spacing:-.02em}
+.date{margin:0 0 6px;color:var(--mute)}
+.note{margin:10px 0 0;padding:8px 12px;border-left:3px solid var(--acc);background:var(--surf);font-size:15px}
+ul{list-style:none;margin:14px 0 0;padding:0}
+li{border-top:1px solid var(--line)}
+li:last-child{border-bottom:1px solid var(--line)}
+.row{position:relative;display:flex;gap:14px;align-items:flex-start;padding:14px 2px;min-height:48px;cursor:pointer}
+.row input{position:absolute;opacity:0;width:1px;height:1px}
+.box{flex:0 0 26px;height:26px;margin-top:1px;border:2px solid var(--mute);border-radius:7px;display:grid;place-items:center;transition:background .12s,border-color .12s}
+.row input:checked+.box{background:var(--acc);border-color:var(--acc)}
+.row input:checked+.box::after{content:"";width:6px;height:12px;border:solid var(--acc-ink);border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.row input:focus-visible+.box{outline:3px solid var(--ink);outline-offset:2px}
+.row input:checked~.txt{color:var(--mute);text-decoration:line-through;text-decoration-thickness:1px}
+.r .txt{color:var(--mute)}
+.skim{margin-left:8px;padding:1px 8px;border:1px solid var(--line);border-radius:99px;font-size:12px;font-style:normal;color:var(--mute);white-space:nowrap}
+.from{display:block;font-size:13px;color:var(--mute)}
+.late-box{margin-top:26px;padding:12px 14px 4px;border-left:4px solid var(--late);background:var(--late-bg);border-radius:0 8px 8px 0}
+.late-box h2{margin:0 0 2px;font-size:18px}
+.late-box p{margin:0 0 6px;font-size:14px;color:var(--mute)}
+.late-box ul{margin-top:8px}
+.late-box li{border-color:var(--line);border-color:color-mix(in srgb,var(--late) 30%,transparent)}
+.late-box .row{padding:11px 2px}
+footer{margin-top:28px;font-size:14px;color:var(--mute)}
+footer p{margin:0 0 6px}
+@media (prefers-reduced-motion:reduce){.box{transition:none}}
+.sync{margin:0 0 18px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surf)}
+.sync p{margin:0 0 8px}
+.sync a{color:var(--acc)}
+.sync input{width:100%;margin:2px 0 8px;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.sbtn{padding:8px 14px;border:1.5px solid var(--acc);border-radius:8px;background:transparent;color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
+.view .row{cursor:default}
+.view footer{display:none}
+.sync input[readonly]{text-overflow:ellipsis}
+.chip i{display:block;font-style:normal;font-size:12px;opacity:.85}
+.hy{border-color:var(--acc);color:var(--acc)}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+(function(){
+var K='pharm-plan-v1',TEST=[2026,9,26];
+var DAYS=[{"d": "2026-10-20", "th": "Cholinergic (Dr Steve)", "note": "About 3 hours tonight, starting with Dr Steve's topics.", "items": [{"id": "0.0", "t": "Cholinergic transmission: biochemistry & physiology (Dr Steve, 86 pages, about 1.5 hours)", "k": "h"}, {"id": "0.1", "t": "Cholinergic drugs, materials 1 and 2 (Dr Steve, 76 pages, about 1.25 hours)", "k": "h"}, {"id": "2.0", "t": "Interneuronal blockers & myasthenia gravis drugs (3 pages, about 15 minutes)", "k": "t"}, {"id": "q1020z", "t": "Other subjects (30 min), maintenance only", "k": "r"}]}, {"d": "2026-10-21", "th": "Mediators and analgesics", "note": "About 7 hours of pharmacology today.", "items": [{"id": "q1021a", "t": "Recall yesterday’s topics from your notes (10 min)", "k": "r"}, {"id": "y1021a", "t": "Revise histamine receptors & antagonists (high yield, about 30 minutes)", "k": "x"}, {"id": "c1b", "t": "Cholinergic drugs, materials 3 to 5 (Dr Steve, 140 pages, about 1.75 hours)", "k": "h"}, {"id": "2.2", "t": "Vasoactive peptides I: angiotensin, kinins (Dr Steve, 21 pages, about 30 minutes)", "k": "h"}, {"id": "3.3", "t": "Eicosanoids (Dr Steve, 48 pages, about 1.25 hours)", "k": "h"}, {"id": "4.0", "t": "Non-narcotic analgesics, salicylates & migraine drugs (Dr Steve, 7 + 36 + 46 pages, about 2 hours)", "k": "h"}, {"id": "2.1", "t": "Skeletal muscle relaxants, other analgesic agents, antipyretic agents (7 pages, about 15 minutes)", "k": "t"}, {"id": "9.3", "t": "Purines & adenosine (Dr Abimbola, 34 pages, about 45 minutes)", "k": "h"}, {"id": "q1021z", "t": "Other subjects (30 min), maintenance only", "k": "r"}]}, {"d": "2026-10-22", "th": "Peptides, the CNS and movement", "note": "About 7 hours of pharmacology today.", "items": [{"id": "q1022a", "t": "Recall yesterday’s topics from your notes (10 min)", "k": "r"}, {"id": "y1022a", "t": "Revise serotonin & serotonin receptor antagonists (high yield, about 30 minutes)", "k": "x"}, {"id": "3.0", "t": "Vasoactive peptides II: vasopressin, natriuretic peptides (Dr Abimbola, 90 pages, about 1.75 hours)", "k": "h"}, {"id": "3.2", "t": "Vasoactive peptides III: endothelins, VIP, substance P, adrenomedullin, NPY (no material, notes needed, about 15 minutes)", "k": "s"}, {"id": "4.3", "t": "Introduction to CNS pharmacology, transmitters, drug entry into the CNS (Dr Steve, 96 pages, about 1.75 hours)", "k": "h"}, {"id": "8.0", "t": "Parkinsonism & other movement disorders (Dr Steve, 98 pages, about 2 hours)", "k": "h"}, {"id": "8.1", "t": "Drug treatment of dementia (22 pages, about 25 minutes)", "k": "t"}, {"id": "4.2", "t": "Cannabinoids (no material, notes needed, about 15 minutes)", "k": "s"}, {"id": "q1022z", "t": "Other subjects (30 min), maintenance only", "k": "r"}]}, {"d": "2026-10-23", "th": "Epilepsy and psychiatry", "note": "About 7 hours of pharmacology today.", "items": [{"id": "q1023a", "t": "Recall yesterday’s topics from your notes (10 min)", "k": "r"}, {"id": "y1023a", "t": "Revise dopamine & dopamine antagonists (high yield, about 30 minutes)", "k": "x"}, {"id": "7.2", "t": "Antiseizure drugs, status epilepticus and other clinical states (Dr Steve, 110 pages, about 2.5 hours)", "k": "h"}, {"id": "5.1", "t": "Antipsychotics: typical & atypical (Dr Abimbola, 56 pages, about 1.5 hours)", "k": "h"}, {"id": "5.2", "t": "Antidepressants (Dr Abimbola, 80 pages, about 2 hours)", "k": "h"}, {"id": "5.0", "t": "Mood disorders: pathophysiology (no material, notes needed, about 20 minutes)", "k": "t"}, {"id": "4.1", "t": "Ergot alkaloids (no material, notes needed, about 15 minutes)", "k": "s"}, {"id": "q1023z", "t": "Other subjects (30 min), maintenance only", "k": "r"}]}, {"d": "2026-10-24", "th": "Sedatives, adrenergic and the rest", "note": "About 7 hours of pharmacology today. Many short topics, so move quickly.", "items": [{"id": "q1024a", "t": "Recall yesterday’s topics from your notes (10 min)", "k": "r"}, {"id": "6.0", "t": "Lithium, anxiolytics & other mood stabilizers (no material, notes needed, about 25 minutes)", "k": "t"}, {"id": "n.anx", "t": "Anxiety (15 pages, about 20 minutes)", "k": "t"}, {"id": "6.1", "t": "Barbiturates & non-barbiturates (no material, notes needed, about 15 minutes)", "k": "t"}, {"id": "6.2", "t": "GABA receptor agonists (no material, notes needed, about 10 minutes)", "k": "s"}, {"id": "6.3", "t": "Melatonin agonists, sedative-hypnotics & benzodiazepines (no material, notes needed, about 25 minutes)", "k": "t"}, {"id": "n.dep", "t": "CNS depressants (75 pages, about 45 minutes)", "k": "t"}, {"id": "9.2", "t": "CNS stimulants (54 pages, about 45 minutes)", "k": "t"}, {"id": "1.0", "t": "Adrenergic transmission: biochemistry & physiology (54 pages, about 45 minutes)", "k": "t"}, {"id": "1.1", "t": "Adrenoceptor agonists & sympathomimetics (12 pages, about 15 minutes)", "k": "t"}, {"id": "1.2", "t": "Adrenoceptor antagonists (54 pages, about 45 minutes)", "k": "t"}, {"id": "3.1", "t": "Nitric oxide (read the 49-page material; skim the 80-page one only if time, about 30 minutes)", "k": "t"}, {"id": "8.2", "t": "General anaesthetics (19 pages, about 25 minutes)", "k": "t"}, {"id": "9.0", "t": "Local anaesthetics (28 + 21 pages, about 30 minutes)", "k": "t"}, {"id": "9.1", "t": "Drug dependence, alcohol use & misuse (44 + 34 pages, about 45 minutes)", "k": "t"}, {"id": "q1024z", "t": "Other subjects (30 min), maintenance only", "k": "r"}]}, {"d": "2026-10-25", "th": "Revision", "note": "About 6 hours: revise, practise, then rest.", "items": [{"id": "y1025a", "t": "Revise opioid agonists & antagonists and antispasmodics (high yield, about 50 minutes)", "k": "x"}, {"id": "y1025b", "t": "Quick recall: histamine, serotonin, dopamine (about 45 minutes)", "k": "x"}, {"id": "y1025c", "t": "Dr Steve topics: go through your notes once more (about 1.5 hours)", "k": "x"}, {"id": "y1025d", "t": "Dr Abimbola topics: go through your notes once more (about 1 hour)", "k": "x"}, {"id": "y1025e", "t": "Practice questions on the high-yield topics (about 1 hour)", "k": "x"}, {"id": "y1025f", "t": "Build a one-sheet must-know list: drugs of choice, adverse effects, contraindications (30 minutes)", "k": "x"}, {"id": "y1025g", "t": "Catch-up: anything still unticked (about 25 minutes)", "k": "x"}]}, {"d": "2026-10-26", "th": "Test day", "note": "", "items": [{"id": "y1026a", "t": "Skim the must-know sheet only. No new material.", "k": "x"}]}];
+var PRE=["Histamine receptors & antagonists", "Serotonin & serotonin receptor antagonists", "Dopamine & dopamine antagonists", "Antispasmodics & spasmolytics", "Opioid agonists & antagonists"];
+var S={},ok=true;
+try{S=JSON.parse(localStorage.getItem(K)||'null')||{};}catch(e){ok=false;}
+
+var Q=new URLSearchParams(location.search),VID=Q.get('v')||'',VUSER=Q.get('u')||'',VIEW=!!VID,vmsg='Loading progress...',vlast=0;
+var T={},G={token:'',gist:''},msg='Not connected',timer=null,busy=false,again=false,FN='pharm-plan-sync.json';
+try{T=JSON.parse(localStorage.getItem(K+'-t')||'{}')||{};G=JSON.parse(localStorage.getItem(K+'-gh')||'null')||G;}catch(e){}
+if(VIEW){S={};T={};}
+function save(){try{localStorage.setItem(K,JSON.stringify(S));localStorage.setItem(K+'-t',JSON.stringify(T));}catch(e){ok=false;}}
+function saveG(){try{localStorage.setItem(K+'-gh',JSON.stringify(G));}catch(e){}}
+function gh(path,o){o=o||{};var get=!o.method;var url='https://api.github.com'+path+(get?(path.indexOf('?')<0?'?':'&')+'_='+Date.now():'');
+ return fetch(url,{method:o.method||'GET',cache:'no-store',headers:{'Authorization':'Bearer '+G.token,'Accept':'application/vnd.github+json','Content-Type':'application/json'},body:o.body}).then(function(r){if(!r.ok)throw new Error(r.status===401?'GitHub rejected the token':'GitHub error '+r.status);return r.json();});}
+function doc(){return JSON.stringify({v:1,s:S,t:T});}
+function merge(rs,rt){Object.keys(rt).forEach(function(id){if((rt[id]||0)>(T[id]||0)){T[id]=rt[id];S[id]=rs[id]?1:0;}});}
+function findGist(p){return gh('/gists?per_page=100&page='+p).then(function(l){var g=l.filter(function(x){return x.files&&x.files[FN];})[0];if(g)return g.id;return(l.length===100&&p<5)?findGist(p+1):null;});}
+function ensureGist(){if(G.gist)return Promise.resolve(G.gist);
+ return findGist(1).then(function(id){if(id)return id;var f={};f[FN]={content:doc()};return gh('/gists',{method:'POST',body:JSON.stringify({description:'Pharmacology plan sync',public:false,files:f})}).then(function(g){return g.id;});}).then(function(id){G.gist=id;saveG();return id;});}
+function sync(){
+ if(!G.token||VIEW)return;
+ if(busy){again=true;return;}
+ busy=true;msg='Syncing...';render(true);
+ ensureGist().then(function(id){return gh('/gists/'+id).then(function(g){
+   var f=g.files&&g.files[FN],r={};try{r=JSON.parse(f.content);}catch(e){}
+   if(g.owner&&g.owner.login&&G.user!==g.owner.login){G.user=g.owner.login;saveG();}
+   merge(r.s||{},r.t||{});save();
+   if(f&&f.content===doc())return;
+   var f2={};f2[FN]={content:doc()};
+   return gh('/gists/'+id,{method:'PATCH',body:JSON.stringify({files:f2})});});})
+ .then(function(){msg='Synced at '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});})
+ .catch(function(e){var m=e&&e.message?e.message:'check your connection';if(/404/.test(m)){G.gist='';saveG();}msg='Sync failed: '+m;})
+ .then(function(){busy=false;render(true);if(again){again=false;queue();}});
+}
+function queue(){if(!G.token)return;clearTimeout(timer);timer=setTimeout(sync,1500);}
+function vload(force){
+ if(!force&&Date.now()-vlast<30000)return;
+ vlast=Date.now();vmsg='Loading progress...';render(true);
+ var q='?_='+Date.now(),api='https://api.github.com/gists/'+encodeURIComponent(VID)+q,
+  raw=VUSER?'https://gist.githubusercontent.com/'+encodeURIComponent(VUSER)+'/'+encodeURIComponent(VID)+'/raw/'+FN+q:'';
+ fetch(api,{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(g){return g.files[FN].content;})
+ .catch(function(){if(!raw)throw 0;return fetch(raw,{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.text();});})
+ .then(function(txt){var d=JSON.parse(txt),last=0;S=d.s||{};T=d.t||{};Object.keys(T).forEach(function(k){if(T[k]>last)last=T[k];});
+  vmsg=last?'Last updated '+new Date(last).toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+'.':'Nothing ticked yet.';})
+ .catch(function(){vmsg='Could not load the progress right now. Try again in a few minutes.';})
+ .then(function(){render(true);});
+}
+function vbanner(){return '<div class="sync"><p><b>View only.</b> '+esc(vmsg)+'</p><button class="sbtn" data-act="vrefresh">Refresh</button> <a href="'+esc(location.pathname)+'">Track your own progress</a></div>';}
+function share(){if(!G.gist)return '';var L=location.origin+location.pathname+'?v='+G.gist+(G.user?'&u='+encodeURIComponent(G.user):'');
+ return '<p style="margin-top:14px"><b>View-only link</b> for classmates. Anyone with it can see your ticks but cannot change them.</p><input id="shl" readonly value="'+esc(L)+'"> <button class="sbtn" data-act="copy">Copy link</button>';}
+function syncUI(){
+ if(VIEW)return '';
+ if(G.token)return '<div class="sync"><p>'+esc(msg)+'</p><button class="sbtn" data-act="now">Sync now</button> <button class="sbtn" data-act="off">Disconnect</button>'+share()+'</div>';
+ return '<div class="sync"><p><b>Sync across your devices.</b> Progress is stored in a private gist on your GitHub account. <a href="https://github.com/settings/tokens/new?scopes=gist&amp;description=Pharm%20plan%20sync" target="_blank" rel="noopener">Create a token</a> with only the gist permission, then paste it here on each device.</p><input id="tok" type="password" placeholder="Paste token" autocomplete="off"> <button class="sbtn" data-act="connect">Connect</button></div>';
+}
+var now=new Date(),pad=function(n){return String(n).padStart(2,'0');};
+var iso=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+var ti=DAYS.findIndex(function(x){return x.d===iso;});
+if(ti<0)ti=iso<DAYS[0].d?0:DAYS.length-1;
+var vi=ti;
+var left=Math.round((Date.UTC(TEST[0],TEST[1],TEST[2])-Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()))/864e5);
+var cd=left>1?'The test is in '+left+' days.':left===1?'The test is tomorrow.':left===0?'The test is today.':'The test is over.';
+function dt(s,o){return new Date(s+'T12:00:00').toLocaleDateString('en-GB',o);}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function isT(x){return x.k==='t'||x.k==='s'||x.k==='h';}
+var total=PRE.length+DAYS.reduce(function(n,d){return n+d.items.filter(isT).length;},0);
+function read(){return PRE.length+DAYS.reduce(function(n,d){return n+d.items.filter(function(x){return isT(x)&&S[x.id];}).length;},0);}
+function st(i){var a=DAYS[i].items,n=a.filter(function(x){return S[x.id];}).length;return n===a.length?'done':n?'part':'';}
+function cnt(i){var a=DAYS[i].items;return a.filter(function(x){return S[x.id];}).length+'/'+a.length;}
+function row(x,extra){return '<li class="'+(x.k==='r'?'r':'')+'"><label class="row"><input type="checkbox" data-id="'+x.id+'"'+(S[x.id]?' checked':'')+(VIEW?' disabled':'')+'><span class="box"></span><span class="txt">'+esc(x.t)+(x.k==='s'?'<em class="skim">skim</em>':'')+(x.k==='h'?'<em class="skim hy">high yield</em>':'')+(extra||'')+'</span></label></li>';}
+var app=document.getElementById('app');if(VIEW)app.className='view';
+function render(keep){
+ var n0=app.querySelector('.chips'),sl=n0?n0.scrollLeft:0;
+ var d=DAYS[vi],r=read(),p=Math.round(r/total*100),carry=[];
+ if(vi===ti)DAYS.forEach(function(dd,i){if(i<ti)dd.items.forEach(function(x){if(isT(x)&&!S[x.id])carry.push({x:x,i:i});});});
+ var cb=carry.length?'<section class="late-box"><h2>Still to do from earlier days</h2><p>Do the full topics first. Skim topics only need drug names, one use and one adverse effect.</p><ul>'+carry.map(function(c){return row(c.x,'<span class="from">'+dt(DAYS[c.i].d,{weekday:'short',day:'numeric',month:'short'})+'</span>');}).join('')+'</ul></section>':'';
+ var chips=DAYS.map(function(x,i){var s=st(i);return '<button class="chip '+s+' '+(i<ti&&s!=='done'?'late':'')+' '+(i===ti?'now':'')+' '+(i===vi?'sel':'')+'" data-day="'+i+'"><span>'+dt(x.d,{weekday:'short'})+'</span><b>'+dt(x.d,{day:'numeric',month:'short'})+'</b><i>'+cnt(i)+'</i></button>';}).join('');
+ app.innerHTML=(VIEW?vbanner():'')+'<p class="cd">'+cd+'</p><div class="bar" role="progressbar" aria-label="Topics read" aria-valuemin="0" aria-valuemax="'+total+'" aria-valuenow="'+r+'"><i style="width:'+p+'%"></i></div><p class="prog">'+r+' of '+total+' topics read</p>'
+ +'<nav class="chips" aria-label="Days">'+chips+'</nav>'
+ +'<h1>'+esc(d.th)+'</h1><p class="date">'+dt(d.d,{weekday:'long',day:'numeric',month:'long'})+(vi===ti?' (today)':'')+'</p>'+(d.note?'<p class="note">'+esc(d.note)+'</p>':'')
+ +'<ul>'+d.items.map(function(x){return row(x);}).join('')+'</ul>'+cb
+ +'<footer>'+syncUI()+'<p>After each topic, write a one-page summary as question-and-answer pairs. Those become your flashcards and your notes for a surprise test.</p>'+(ok?'':'<p>Ticks cannot be saved in this view, so they will be lost when you close it.</p>')+'</footer>';
+ var n1=app.querySelector('.chips');if(keep&&n1)n1.scrollLeft=sl;
+}
+function center(){var s=app.querySelector('.chip.sel');if(s)s.scrollIntoView({inline:'center',block:'nearest'});}
+app.addEventListener('change',function(e){var c=e.target,id=c.getAttribute&&c.getAttribute('data-id');if(!id)return;S[id]=c.checked?1:0;T[id]=Date.now();save();queue();render(true);var n=app.querySelector('[data-id="'+id+'"]');if(n)n.focus({preventScroll:true});});
+app.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.chip');if(b){vi=+b.getAttribute('data-day');render();center();}});
+app.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-act]');if(!b)return;var a=b.getAttribute('data-act');
+ if(a==='connect'){var t=app.querySelector('#tok'),v=t?t.value.trim():'';if(!v)return;G={token:v,gist:''};saveG();sync();}
+ else if(a==='now'){sync();}
+ else if(a==='vrefresh'){vload(true);}
+ else if(a==='copy'){var i=app.querySelector('#shl');if(i){i.select();try{navigator.clipboard.writeText(i.value);}catch(e){}b.textContent='Copied';}}
+ else if(a==='off'){G={token:'',gist:''};saveG();msg='Not connected';render(true);}
+});
+render();center();sync();if(VIEW)vload(true);
+document.addEventListener('visibilitychange',function(){if(!document.hidden){if(VIEW)vload();else sync();}});
+})();
+</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+</body>
+</html>
